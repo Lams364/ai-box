@@ -1,13 +1,20 @@
+version: '3.8'
+
 services:
-  llamacpp-server:
-    image: ghcr.io/ggerganov/llama.cpp:server
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - 8080:8080
+      - "8888:8888"
     volumes:
-      - ./models:/models
+      - ./models:/app/models
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]  # Ensure GPU is reserved
+    runtime: nvidia  # Use NVIDIA runtime explicitly
     environment:
-      LLAMA_ARG_MODEL: models/Llama-3.2-3B-Instruct-Q4_K_M.gguf
-      LLAMA_ARG_CTX_SIZE: 4096
-      LLAMA_ARG_N_PARALLEL: 2
-      LLAMA_ARG_ENDPOINT_METRICS: 1
-      LLAMA_ARG_PORT: 8080
+      - NVIDIA_VISIBLE_DEVICES=all  # Make sure all GPUs are visible to the container
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility  # Capabilities required for GPU usage
