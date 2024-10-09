@@ -21,6 +21,26 @@ This project is about using a docker container to run a large language model in 
 
 The server will be running on `localhost:8080`. You can interact with it via HTTP requests. The endpoints are available in the [LLaMA.cpp HTTP Server](https://github.com/ggerganov/llama.cpp/blob/master/examples/server/README.md#api-endpoints) documentation.
 
+## Nvidia - Windows - Docker - WSL Install
+1. Install Nvidia Cuda
+```
+wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb
+sudo dpkg -i cuda-keyring_1.1-1_all.deb
+sudo apt-get update
+sudo apt-get -y install cuda-toolkit-12-6
+```
+1. Install Nvidia Drivers
+```
+sudo apt-get install -y nvidia-open
+sudo apt-get install -y cuda-drivers
+```
+1. Config nvidia-docjer runtime
+```
+sudo apt-get install -y nvidia-docker2
+sudo nvidia-ctk runtime configure --runtime=docker
+sudo systemctl restart docker
+```
+1. Command to run docker-compose : `docker-compose -f docker-compose-cuda.yaml up --build`
 
 Example:
 

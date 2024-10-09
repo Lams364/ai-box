@@ -1,7 +1,8 @@
 **.env
 **.venv
 **.vscode
-/models
+/models/*
+!.gitkeep
 **__pycache__
 **.DS_Store
 **/node_modules
