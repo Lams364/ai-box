@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   app:
     build:
@@ -13,7 +11,9 @@ services:
       resources:
         reservations:
           devices:
-            - capabilities: [gpu]  # Ensure GPU is reserved
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
     runtime: nvidia  # Use NVIDIA runtime explicitly
     environment:
       - NVIDIA_VISIBLE_DEVICES=all  # Make sure all GPUs are visible to the container
