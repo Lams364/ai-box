@@ -85,16 +85,20 @@ function getWebviewContent(suggestedCode) {
 			<style>
 				body {
 					font-family: Arial, sans-serif;
+					background-color: #2d2d2d; /* Dark background for entire page */
+					color: #ffffff; /* White text for better readability */
 					padding: 20px;
 				}
 				#code {
 					width: 100%;
 					height: 200px;
-					background-color: #f5f5f5;
+					background-color: #2d2d2d; /* Matching code block background */
+					color: #ffffff; /* White text color for the code */
 					border: 1px solid #ccc;
 					overflow: auto;
 					white-space: pre;
 					padding: 10px;
+					border-radius: 5px;
 				}
 				.button-container {
 					margin-top: 20px;
@@ -104,6 +108,16 @@ function getWebviewContent(suggestedCode) {
 					padding: 10px 15px;
 					font-size: 14px;
 					cursor: pointer;
+					border: none;
+					border-radius: 5px;
+				}
+				#accept {
+					background-color: #4CAF50;
+					color: white;
+				}
+				#decline {
+					background-color: #f44336;
+					color: white;
 				}
 			</style>
 		</head>
@@ -129,6 +143,7 @@ function getWebviewContent(suggestedCode) {
 		</html>
 	`;
 }
+
 
 // This method is called when your extension is activated
 function activate(context) {
