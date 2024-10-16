@@ -1,8 +1,5 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
 const axios = require('axios');
-
 
 async function generateLogAdviceLLM() {
 	const editor = vscode.window.activeTextEditor;
@@ -15,12 +12,11 @@ async function generateLogAdviceLLM() {
 	}
 
 	const prompt = (
-		"Context: You are an AI assistant that helps people with their questions. "
-		+ "Answer only the question you are being asked. Don't add questions that is not in the prompt. Be consise. "
-		+ "Don't add an introduction or any form of 'A:' to your answer. Just answer the question after the 'QUESTION:' tag. "
-		+ "QUESTION:\n\n"
+		"You are an AI assistant that helps developers improve their logging practices. "
+		+ "Based on the following code snippet, improve with better logging practices: "
+		+ "Code Snippet:\n\n"
 		+ selectedText
-	)
+	);
 
 	try {
 		console.log("Calling the LLM model to get code suggestion with the selected text: ", selectedText);
@@ -37,10 +33,8 @@ async function generateLogAdviceLLM() {
 
 		const suggestedCode = response.data.content;
 
-		// Insert the suggested code into the editor
-		editor.edit(editBuilder => {
-			editBuilder.insert(editor.selection.end, `\n\n${suggestedCode}`);
-		});
+		// Open a webview panel to show the generated code and buttons
+		openWebviewWithCodeSuggestion(suggestedCode, editor);
 
 	} catch (error) {
 		console.error(error);
@@ -48,15 +42,95 @@ async function generateLogAdviceLLM() {
 	}
 }
 
+function openWebviewWithCodeSuggestion(suggestedCode, editor) {
+	// Create a new webview panel
+	const panel = vscode.window.createWebviewPanel(
+		'logAdvice', // Identifies the type of the webview
+		'Log Advice Suggestion', // Title displayed to the user
+		vscode.ViewColumn.One, // Editor column to show the new webview panel in
+		{
+			enableScripts: true // Allow scripts in the webview
+		}
+	);
 
+	// HTML content of the webview
+	panel.webview.html = getWebviewContent(suggestedCode);
 
+	// Handle messages from the webview (for buttons)
+	panel.webview.onDidReceiveMessage(async message => {
+		switch (message.command) {
+			case 'accept':
+				// Insert the suggested code in the editor
+				editor.edit(editBuilder => {
+					editBuilder.replace(editor.selection, suggestedCode);
+				});
+				panel.dispose(); // Close the webview panel
+				break;
+			case 'decline':
+				panel.dispose(); // Close the webview panel without doing anything
+				break;
+		}
+	});
+}
+
+// Function to generate HTML content for the webview
+function getWebviewContent(suggestedCode) {
+	return `
+		<!DOCTYPE html>
+		<html lang="en">
+		<head>
+			<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<title>Code Suggestion</title>
+			<style>
+				body {
+					font-family: Arial, sans-serif;
+					padding: 20px;
+				}
+				#code {
+					width: 100%;
+					height: 200px;
+					background-color: #f5f5f5;
+					border: 1px solid #ccc;
+					overflow: auto;
+					white-space: pre;
+					padding: 10px;
+				}
+				.button-container {
+					margin-top: 20px;
+				}
+				button {
+					margin-right: 10px;
+					padding: 10px 15px;
+					font-size: 14px;
+					cursor: pointer;
+				}
+			</style>
+		</head>
+		<body>
+			<h2>Suggested Code Improvement</h2>
+			<div id="code">${suggestedCode}</div>
+			<div class="button-container">
+				<button id="accept">Accept</button>
+				<button id="decline">Decline</button>
+			</div>
+
+			<script>
+				// Handle button clicks and send messages to the extension
+				const vscode = acquireVsCodeApi();
+				document.getElementById('accept').addEventListener('click', () => {
+					vscode.postMessage({ command: 'accept' });
+				});
+				document.getElementById('decline').addEventListener('click', () => {
+					vscode.postMessage({ command: 'decline' });
+				});
+			</script>
+		</body>
+		</html>
+	`;
+}
 
 // This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
-
-/**
- * @param {vscode.ExtensionContext} context
- */
 function activate(context) {
 
 	context.subscriptions.push(vscode.commands.registerCommand('log-advice-generator.generateLogAdvice', generateLogAdviceLLM));
@@ -64,7 +138,6 @@ function activate(context) {
 	context.subscriptions.push(vscode.commands.registerCommand('log-advice-generator.helloWorld', function () {
 		vscode.window.showInformationMessage('Hello World from Log Advice Generator!');
 	}));
-
 }
 
 function deactivate() { }
@@ -72,4 +145,4 @@ function deactivate() { }
 module.exports = {
 	activate,
 	deactivate
-}
+};
