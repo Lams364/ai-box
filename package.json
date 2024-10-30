@@ -5,7 +5,6 @@
     "log-advice-generator"
   ],
   "scripts": {
-    "install": "npm install && pip install -r requirements.txt",
     "start":"code --extensionDevelopmentPath=${workspaceFolder}/log-advice-generator",
     "build":"docker-compose up --build"
   }
