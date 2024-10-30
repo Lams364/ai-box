@@ -1,5 +1,12 @@
 {
-  "dependencies": {
-    "axios": "^1.7.7"
+  "name": "ai-box",
+  "version": "0.1.0",
+  "workspaces": [
+    "log-advice-generator"
+  ],
+  "scripts": {
+    "install": "npm install && pip install -r requirements.txt",
+    "start":"code --extensionDevelopmentPath=${workspaceFolder}/log-advice-generator",
+    "build":"docker-compose up --build"
   }
 }
