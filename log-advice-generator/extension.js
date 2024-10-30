@@ -24,8 +24,8 @@ async function generateLogAdviceLLM() {
 
 	try {
 		console.log("Calling the LLM model to get code suggestion with the selected text: ", selectedText);
-		const response = await axios.post('http://localhost:8080/completion', {
-			prompt: prompt,
+		const response = await axios.post('http://localhost:8888/predict', {
+			text: prompt,
 			max_tokens: 100,
 			temperature: 0.1,
 		}, {
