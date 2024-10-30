@@ -46,7 +46,7 @@ Example:
 
 ```bash
 curl --request POST \
-    --url http://localhost:8888/completion \
+    --url http://localhost:8888/predict \
     --header "Content-Type: application/json" \
-    --data '{"prompt": "Building a website can be done in 10 simple steps:","n_predict": 128}'
+    --data '{"text": "Building a website can be done in 10 simple steps:","n_predict": 128}'
 ```
