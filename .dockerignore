@@ -1,0 +1,7 @@
+node_modules
+log-advice-generator
+models
+*.log
+*.tmp
+*.cache
+*.git
