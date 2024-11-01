@@ -1,7 +1,7 @@
 {
   "name": "log-advice-generator",
-  "displayName": "log-advice-generator",
-  "description": "",
+  "displayName": "Log Advice Generator",
+  "description": "Generates log advice based on selected code",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.93.0"
@@ -9,19 +9,29 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onLanguage:javascript",
+    "onLanguage:typescript",
+    "onCommand:log-advice-generator.generateLogAdvice"
+  ],
   "main": "./extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "log-advice-generator.helloWorld",
-        "title": "Hello World"
-      },
-      {
         "command": "log-advice-generator.generateLogAdvice",
-        "title": "Generate Log Advice"
+        "title": "Generate Log Advice",
+        "category": "log-advice-generator"
       }
-    ]
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "log-advice-generator.generateLogAdvice",
+          "when": "editorHasSelection",
+          "group": "navigation"
+        }
+      ]
+    }
   },
   "scripts": {
     "lint": "eslint .",
