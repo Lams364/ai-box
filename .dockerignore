@@ -1,8 +1,10 @@
 node_modules
 log-advice-generator
 models
+tests
 .venv
 venv
+.env
 *.log
 *.tmp
 *.cache

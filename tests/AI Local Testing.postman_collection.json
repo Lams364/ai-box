@@ -1,0 +1,160 @@
+{
+	"info": {
+		"_postman_id": "d28f33bd-8804-4fc5-9066-f7050b4748d6",
+		"name": "AI Local Testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32260303"
+	},
+	"item": [
+		{
+			"name": "Huggingface API",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"text\": \"Context: You are an AI assistant that helps people with their questions. Answer only the question you are being asked. Don't add questions that is not in the prompt. Be consise. Don't add an introduction or any form of 'A:' to your answer. Just answer the question after the 'QUESTION:' tag. QUESTION:\\n\\n Hi, how are you ?\",\r\n    \"tokens\":20\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8888/predict",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"predict"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CPP - AI",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"prompt\": \"CONTEXT: You are an inline code assistant assists developper by adding some logs in their code when usefull. The code presented will only be in JAVA. when changing something add a line at a time under the form 'System.out.println()' revelant to the code given, the code return must be compilable. Just answer after the 'CODE:' tag. CODE:\\n\\n ```public UsineAile(Batiment usine) {\\nsuper(usine.getName(), usine.getImages()); \\nthis.entree = usine.getEntree(); \\nthis.quantiteReq = usine.getQuantite(); \\nthis.sortie = usine.getSortie(); \\nthis.intervalle = usine.getIntervalle();}```\",\r\n    \"n_predict\": 200\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/completion",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"completion"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Change Model Fail",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8888/change_model?name=fail_test",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"change_model"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "fail_test"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Change Model Success",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8888/change_model?name=meta-llama/Llama-3.1-8B-Instruct",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"change_model"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "meta-llama/Llama-3.1-8B-Instruct"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Change Token Success",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8888/change_token?token=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",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"change_token"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "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"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Model Info",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8888/model_info",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"model_info"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
