@@ -113,6 +113,31 @@
 			"response": []
 		},
 		{
+			"name": "Change Token Fail",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8888/change_token?token=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",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"change_token"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "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"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Change Token Success",
 			"request": {
 				"method": "GET",
