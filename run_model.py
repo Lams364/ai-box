@@ -74,14 +74,8 @@ def init_model():
 
     MODEL_NAME = "meta-llama/Llama-3.2-1B-Instruct"
     TOKEN = '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'
-
-    # TOKEN1 = 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
-    # TOKEN2 = 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
     set_model_name(MODEL_NAME)
-    print(next(MODEL.parameters()).device)
-
-def test_token(token:str):
-    tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, trust_remote_code=True, cache_dir=MODEL_DIR, token=TOKEN)       
+    print("Device : " + str(DEVICE))     
 
 init_model()
 
@@ -103,17 +97,17 @@ def predict():
     
     return jsonify({'content': result})
 
-@app.route('/change_model')
+@app.route('/change_model', methods=['POST'])
 def change_model():
-    # Use like this /change_model?name=MODEL_NAME(HUGGINGFACE)
-    name = request.args.get('name')
-    completed = set_model_name(name)
+    # Use like this [POST] /change_model {model_id: MODEL_ID}
+    model_id = request.json.get('model_id')
+    completed = set_model_name(model_id)
     return jsonify({'completed': completed, "model_name": MODEL_NAME})
 
-@app.route('/change_token')
+@app.route('/change_token', methods=['POST'])
 def change_token():
-    # Use like this /change_token?token=HUGGINGFACE_TOKEN
-    token = request.args.get('token')
+    # Use like this [POST] /change_token {token: HUGGINGFACE_TOKEN}
+    token = request.json.get('token')
     completed = set_token(token)
     return jsonify({'completed': completed})
 
