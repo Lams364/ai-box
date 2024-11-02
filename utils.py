@@ -5,7 +5,6 @@ import requests
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-
 logger = logging.getLogger(__name__)
 
 
