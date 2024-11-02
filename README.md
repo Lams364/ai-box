@@ -10,6 +10,7 @@ This project uses HuggingFace transformer and Flask for backend to run and deplo
   - [Run locally](#run-locally)
     - [Aditionnal steps to run on GPU locally](#aditionnal-steps-to-run-on-gpu-locally)
   - [Run on Docker](#run-on-docker)
+  - [Run tests](#run-tests)
   - [API Documentation](#api-documentation)
     - [API endpoint:`/predict`](#api-endpointpredict)
     - [API endpoint:`/change_model`](#api-endpointchange_model)
@@ -33,14 +34,14 @@ This project uses HuggingFace transformer and Flask for backend to run and deplo
    - On Windows: `.venv\Scripts\activate`
    - On macOS/Linux: `source .venv/bin/activate`
 4. Install dependancies: `pip install -r requirements.txt`
-5. Start backend: `python run_model.py` or `npm run start-api`
+5. Start backend: `python app.py` or `npm run start-api`
    - The server will start on [http://localhost:8888](http://localhost:8888)
 
 ### Aditionnal steps to run on GPU locally
 
 1. Install CUDA on your local Machine : [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit)
 2. Install Torch-Cuda : [Start Locally - PyTorch](https://pytorch.org/get-started/locally/)
-3. Start backend: `python run_model.py` or `npm run start-api`
+3. Start backend: `python app.py` or `npm run start-api`
    - The server will start on [http://localhost:8888](http://localhost:8888)
 
 ## Run on Docker
@@ -51,7 +52,15 @@ This project uses HuggingFace transformer and Flask for backend to run and deplo
 2. Create and Run container `docker-compose up --build` or `npm run build`
    - The server will start on [http://localhost:8888](http://localhost:8888)
 
+## Run tests
+
+1. Open terminal in project root
+2. install dev dependancies: `pip install -r requirements-dev.txt`
+3. Run tests: `pytest`
+
 ## API Documentation
+
+Once the application is running, you can find the documentation at [http://localhost:8888/docs](http://localhost:8888/docs)
 
 ### API endpoint:`/predict`
 
@@ -81,7 +90,7 @@ This endpoint allows the client to ask a question to the model. It accepts a JSO
 ### API endpoint:`/change_model`
 
 This endpoint allows the client to update the current model by specifying
-the model ID. It accepts a JSON payload with a `model_id` key and responds with the operation status.
+the model ID. It accepts a JSON payload with a `hf_model_id` key and responds with the operation status.
 
 **Endpoint:** `/change_model`
 **Method:** `POST`
@@ -89,7 +98,7 @@ the model ID. It accepts a JSON payload with a `model_id` key and responds with 
 
 ```json
 {
-    "model_id": "MODEL_ID"
+    "hf_model_id": "MODEL_ID"
 }
 ```
 
