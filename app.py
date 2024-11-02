@@ -1,14 +1,13 @@
 import logging
 import os
 
-import requests
-import torch
 import uvicorn
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel, ConfigDict, field_validator, validator
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from pydantic import BaseModel, field_validator
+
+from utils import ModelManager
 
 # Initialize logging
 logging.basicConfig(level=logging.INFO)
@@ -21,15 +20,9 @@ app = FastAPI(
 )
 
 MODEL_DIR = "./models"
-
 os.makedirs(MODEL_DIR, exist_ok=True)
 
-# Define globals
-MODEL = None
-TOKEN = None
-TOKENIZER = None
-DEVICE = None
-MODEL_NAME = None
+model_manager = ModelManager(MODEL_DIR)
 
 
 class PredictRequest(BaseModel):
@@ -65,93 +58,6 @@ class ChangeTokenRequest(BaseModel):
         return hf_token
 
 
-def validate_huggingface_token(hf_token: str) -> bool:
-    headers = {"Authorization": f"Bearer {hf_token}"}
-    response = requests.get("https://huggingface.co/api/whoami-v2", headers=headers)
-    return response.status_code == 200
-
-
-def set_model_name(model_name: str):
-    global MODEL, TOKEN, TOKENIZER, DEVICE, MODEL_NAME  # Reference the globals
-    response = create_model(model_name, TOKEN)
-    if response is not None:
-        MODEL, TOKENIZER, DEVICE = response
-        MODEL_NAME = model_name
-        logger.info(f"Model set to {model_name}")
-        return True
-    else:
-        logger.error(f"Failed to set model to {model_name}")
-        return False
-
-
-def set_token(new_token: str):
-    global MODEL, TOKEN, TOKENIZER, DEVICE, MODEL_NAME  # Reference the globals
-    validate = validate_huggingface_token(new_token)
-    response = create_model(MODEL_NAME, new_token)
-    if validate and response is not None:
-        MODEL, TOKENIZER, DEVICE = response
-        TOKEN = new_token
-        logger.info("Token updated successfully")
-        return True
-    else:
-        logger.error("Failed to update hf_token")
-        return False
-
-
-def create_model(model_name: str, hf_token: str):
-    try:
-        # Check if the model is already in the model directory, otherwise download it
-        if not os.path.exists(os.path.join(MODEL_DIR, model_name)):
-            tokenizer = AutoTokenizer.from_pretrained(
-                model_name,
-                trust_remote_code=True,
-                cache_dir=MODEL_DIR,
-                token=hf_token,
-            )
-            # Add a new [PAD] hf_token
-            tokenizer.add_special_tokens({"pad_token": "[PAD]"})
-            model = AutoModelForCausalLM.from_pretrained(
-                model_name,
-                trust_remote_code=True,
-                cache_dir=MODEL_DIR,
-                token=hf_token,
-                pad_token_id=tokenizer.eos_token_id,
-            )
-        else:
-            tokenizer = AutoTokenizer.from_pretrained(
-                MODEL_DIR, trust_remote_code=True, hf_token=hf_token
-            )
-            # Add a new [PAD] hf_token
-            tokenizer.add_special_tokens({"pad_token": "[PAD]"})
-            model = AutoModelForCausalLM.from_pretrained(
-                MODEL_DIR,
-                trust_remote_code=True,
-                token=hf_token,
-                pad_token_id=tokenizer.eos_token,
-            )
-
-        # Move model to GPU if available
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        model.to(device)
-        logger.info(f"Model {model_name} loaded successfully on {device}")
-        return model, tokenizer, device
-    except Exception as e:
-        logger.error(f"Failed to create model {model_name}: {e}")
-        return None
-
-
-def init_model():
-    global MODEL, TOKEN, MODEL_NAME  # Reference the globals
-    # Model details
-    # meta-llama/Llama-3.2-1B-Instruct
-    # Qwen/Qwen2.5-Coder-1.5B-Instruct
-
-    MODEL_NAME = "meta-llama/Llama-3.2-1B-Instruct"
-    TOKEN = "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"
-    set_model_name(MODEL_NAME)
-    logger.info(f"Device: {DEVICE}")
-
-
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     simplified_errors = []
@@ -166,7 +72,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     )
 
 
-init_model()
+model_manager.init_model()
 
 
 @app.post(
@@ -184,13 +90,13 @@ async def predict(request: PredictRequest):
     Returns:
     - **content**: The generated response from the model.
     """
-    model = MODEL
-    tokenizer = TOKENIZER
+    model = model_manager.model
+    tokenizer = model_manager.tokenizer
     prompt = request.prompt
     max_tokens = request.max_new_tokens
 
     inputs = tokenizer(prompt, return_tensors="pt", padding=True, truncation=True).to(
-        DEVICE
+        model_manager.device
     )
     inputs["attention_mask"] = (
         inputs["attention_mask"] if "attention_mask" in inputs else None
@@ -222,8 +128,8 @@ async def change_model(request: ChangeModelRequest):
         raise HTTPException(status_code=400, detail="No hf_model_id provided")
 
     hf_model_id = request.hf_model_id
-    completed = set_model_name(hf_model_id)
-    return {"completed": completed, "model_name": MODEL_NAME}
+    completed = model_manager.set_model_name(hf_model_id)
+    return {"completed": completed, "model_name": model_manager.model_name}
 
 
 @app.post(
@@ -244,7 +150,7 @@ async def change_token(request: ChangeTokenRequest):
         logger.error("No hf_token provided")
         raise HTTPException(status_code=400, detail="No hf_token provided")
     hf_token = request.hf_token
-    completed = set_token(hf_token)
+    completed = model_manager.set_token(hf_token)
     return {"completed": completed}
 
 
@@ -261,7 +167,7 @@ async def model_info():
     - **model_name**: The name of the model currently in use.
     - **device**: Information about the device executing the model (cpu or cuda).
     """
-    return {"model_name": MODEL_NAME, "device": str(DEVICE)}
+    return {"model_name": model_manager.model_name, "device": str(model_manager.device)}
 
 
 if __name__ == "__main__":
