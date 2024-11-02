@@ -107,7 +107,7 @@ function activate(context) {
         if (model) {
             MODEL_ID = model;
             console.log(`Changing Model to : ${MODEL_ID}`)
-            const response = await callBackendGet('/change_model', 'name=' + model)
+            const response = await callBackendPost('/change_model', {model_id: model})
 			console.log(JSON.stringify(response.data, null, 2))
             if (response.data.completed == true) {
                 vscode.window.showInformationMessage('Model Change has been successfull, Model configured : ' + response.data.model_name)
@@ -126,7 +126,7 @@ function activate(context) {
         const token = await vscode.window.showInputBox({ prompt: 'Enter a HuggingFace Model ID'});
         if (token) {
             console.log(`Changing token`)
-            const response = await callBackendGet('/change_token', 'token=' + token)
+            const response = await callBackendPost('/change_token', {token: token})
 			console.log(JSON.stringify(response.data, null, 2))
             if (response.data.completed == true) {
                 vscode.window.showInformationMessage('Token Change has been successfull')

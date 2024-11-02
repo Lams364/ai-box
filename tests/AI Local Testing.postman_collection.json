@@ -65,10 +65,19 @@
 		{
 			"name": "Change Model Fail",
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"model_id\": \"fail_test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "http://localhost:8888/change_model?name=fail_test",
+					"raw": "http://localhost:8888/change_model",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -76,12 +85,6 @@
 					"port": "8888",
 					"path": [
 						"change_model"
-					],
-					"query": [
-						{
-							"key": "name",
-							"value": "fail_test"
-						}
 					]
 				}
 			},
@@ -90,10 +93,19 @@
 		{
 			"name": "Change Model Success",
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"model_id\": \"Qwen/Qwen2.5-Coder-1.5B-Instruct\"\r\n    //\"model_id\": \"meta-llama/Llama-3.2-1B-Instruct\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "http://localhost:8888/change_model?name=meta-llama/Llama-3.1-8B-Instruct",
+					"raw": "http://localhost:8888/change_model",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -105,7 +117,13 @@
 					"query": [
 						{
 							"key": "name",
-							"value": "meta-llama/Llama-3.1-8B-Instruct"
+							"value": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+							"disabled": true
+						},
+						{
+							"key": "name",
+							"value": "meta-llama/Llama-3.2-1B-Instruct",
+							"disabled": true
 						}
 					]
 				}
@@ -115,10 +133,19 @@
 		{
 			"name": "Change Token Fail",
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token\": \"test_fail\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "http://localhost:8888/change_token?token=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",
+					"raw": "http://localhost:8888/change_token",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -130,7 +157,8 @@
 					"query": [
 						{
 							"key": "token",
-							"value": "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"
+							"value": "hello",
+							"disabled": true
 						}
 					]
 				}
@@ -140,10 +168,19 @@
 		{
 			"name": "Change Token Success",
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token\": \"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\"\r\n    //\"token\": \"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\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "http://localhost:8888/change_token?token=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",
+					"raw": "http://localhost:8888/change_token",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -155,7 +192,8 @@
 					"query": [
 						{
 							"key": "token",
-							"value": "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"
+							"value": "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",
+							"disabled": true
 						}
 					]
 				}
