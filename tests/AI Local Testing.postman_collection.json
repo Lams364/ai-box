@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"text\": \"Context: You are an AI assistant that helps people with their questions. Answer only the question you are being asked. Don't add questions that is not in the prompt. Be consise. Don't add an introduction or any form of 'A:' to your answer. Just answer the question after the 'QUESTION:' tag. QUESTION:\\n\\n Hi, how are you ?\",\r\n    \"tokens\":20\r\n}",
+					"raw": "{\r\n    \"prompt\": \"Context: You are an AI assistant that helps people with their questions. Answer only the question you are being asked. Don't add questions that is not in the prompt. Be consise. Don't add an introduction or any form of 'A:' to your answer. Just answer the question after the 'QUESTION:' tag. QUESTION:\\n\\n Hi, how are you ?\",\r\n    \"max_new_tokens\":20\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
