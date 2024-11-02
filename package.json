@@ -5,7 +5,7 @@
     "log-advice-generator"
   ],
   "scripts": {
-    "start":"code --extensionDevelopmentPath=${workspaceFolder}/log-advice-generator",
+    "start":"code --extensionDevelopmentPath=%CD%/log-advice-generator",
     "start-api": "python run_model.py",
     "build":"docker-compose up --build"
   }
