@@ -52,7 +52,7 @@ async function generateLogAdvice() {
             console.log("Calling the LLM model to get code suggestion with the selected text: ", selectedText);
             
 			// Call your LLM service
-			const response = await callBackendPost('/predict', {text: prompt, tokens: 100, temperature: 0.1}) 
+			const response = await callBackendPost('/predict', {prompt: prompt, max_new_tokens: 100, temperature: 0.1}) 
             
 
             console.log("Response from LLM model: ");
@@ -142,7 +142,7 @@ function activate(context) {
 	let getModelInfo = vscode.commands.registerCommand('log-advice-generator.modelInfo', async () => {
 		const response = await callBackendGet('/model_info', null)
 		console.log(JSON.stringify(response.data, null, 2))
-        vscode.window.showInformationMessage('The model configured is [' + response.data.model + ']')
+        vscode.window.showInformationMessage('The model configured is [' + response.data.model_name + ']')
 		vscode.window.showInformationMessage('Running on [' + response.data.device + ']')
 
 

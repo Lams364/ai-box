@@ -81,39 +81,101 @@ init_model()
 
 @app.route('/predict', methods=['POST'])
 def predict():
+    """
+    POST endpoint to get a response for the model.
+    
+    This endpoint allows the client to ask a question to the model. It accepts a JSON payload with a `prompt` key for the user input query.
+    The `max_new_tokens` key specifies the maximum number of new tokens the model should generate in response to the input prompt, 
+    if not specified, 128 by default.
+
+    Usage:
+        [POST] /predict
+        JSON body: { "prompt": "USER_TEXT_PROMPT", "max_new_tokens": MAX_TOKENS }
+
+    Returns:
+        JSON response with:
+            - `content` (str): Model response.
+    """
     data = request.json
-    if 'text' not in data:
-        return jsonify({'error': 'No text provided'}), 400
+    if 'prompt' not in data:
+        return jsonify({'error': 'No prompt provided'}), 400
     
     model = MODEL
     tokenizer = TOKENIZER
-    text = data['text']
-    nb_tokens = data.get('tokens', 128)
+    prompt = data['prompt']
+    max_tokens = data.get('max_new_tokens', 128)
     
-    inputs = tokenizer(text, return_tensors="pt", padding=True, truncation=True).to(DEVICE)
+    inputs = tokenizer(prompt, return_tensors="pt", padding=True, truncation=True).to(DEVICE)
     inputs['attention_mask'] = inputs['attention_mask'] if 'attention_mask' in inputs else None
-    outputs = model.generate(**inputs, max_new_tokens=nb_tokens)
-    result = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    outputs = model.generate(**inputs, max_new_tokens=max_tokens)
+    content = tokenizer.decode(outputs[0], skip_special_tokens=True)
     
-    return jsonify({'content': result})
+    return jsonify({'content': content})
 
 @app.route('/change_model', methods=['POST'])
 def change_model():
-    # Use like this [POST] /change_model {model_id: MODEL_ID}
+    """
+    POST endpoint to change the active model in the application.
+    
+    This endpoint allows the client to update the current model by specifying
+    the model ID. It accepts a JSON payload with a `model_id` key and 
+    responds with the operation status.
+
+    Usage:
+        [POST] /change_model
+        JSON body: { "model_id": "MODEL_ID" }
+
+    Returns:
+        JSON response with:
+            - `completed` (bool): True if the model change was successful, False otherwise.
+            - `model_name` (str): The name of the model currently in use (for confirmation).
+    """
+    if 'model_id' not in request.json:
+        return jsonify({'error': 'No model_id provided'}), 400
+    
     model_id = request.json.get('model_id')
     completed = set_model_name(model_id)
     return jsonify({'completed': completed, "model_name": MODEL_NAME})
 
 @app.route('/change_token', methods=['POST'])
 def change_token():
-    # Use like this [POST] /change_token {token: HUGGINGFACE_TOKEN}
+    """
+    POST endpoint to change the active huggingface token in the application.
+    
+    This endpoint allows the client to update the current huggingface token by specifying
+    a token. It accepts a JSON payload with a `token` key and 
+    responds with the operation status.
+
+    Usage:
+        [POST] /change_model
+        JSON body: { "token": "HUGGINGFACE_TOKEN" }
+
+    Returns:
+        JSON response with:
+            - `completed` (bool): True if the token change was successful, False otherwise.
+    """
+    if 'token' not in request.json:
+        return jsonify({'error': 'No token provided'}), 400
     token = request.json.get('token')
     completed = set_token(token)
     return jsonify({'completed': completed})
 
 @app.route('/model_info')
 def model_info():
-    return jsonify({'model': MODEL_NAME, "device": str(DEVICE)})
+    """
+    GET endpoint to get information about the active model in the application.
+    
+    This endpoint allows the client to get basic information about the active model in the application.
+
+    Usage:
+        [GET] /model_info
+
+    Returns:
+        JSON response with:
+            - `model_name` (str): The name of the model currently in use.
+            - `device` (str): Information about the device executing the model (cpu) or (cuda)
+    """
+    return jsonify({'model_name': MODEL_NAME, "device": str(DEVICE)})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8888)
