@@ -1,4 +1,8 @@
 transformers
 requests
 torch
-flask
+uvicorn
+logging
+fastapi
+pydantic
+httpx
