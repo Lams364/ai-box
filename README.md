@@ -22,7 +22,6 @@ This project uses HuggingFace transformer and Flask for backend to run and deplo
 
 - Docker (Docker Desktop)
 - Python (tested with 3.11/3.12)
-- Node v20
 
 ## Run locally
 
@@ -34,14 +33,14 @@ This project uses HuggingFace transformer and Flask for backend to run and deplo
    - On Windows: `.venv\Scripts\activate`
    - On macOS/Linux: `source .venv/bin/activate`
 4. Install dependancies: `pip install -r requirements.txt`
-5. Start backend: `python app.py` or `npm run start-api`
+5. Start backend: `python app.py`
    - The server will start on [http://localhost:8888](http://localhost:8888)
 
 ### Aditionnal steps to run on GPU locally
 
 1. Install CUDA on your local Machine : [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit)
 2. Install Torch-Cuda : [Start Locally - PyTorch](https://pytorch.org/get-started/locally/)
-3. Start backend: `python app.py` or `npm run start-api`
+3. Start backend: `python app.py`
    - The server will start on [http://localhost:8888](http://localhost:8888)
 
 ## Run on Docker
@@ -49,7 +48,7 @@ This project uses HuggingFace transformer and Flask for backend to run and deplo
 *If a compatible CUDA device is detected, the container will be executed on the GPU.*
 
 1. Open Docker Desktop
-2. Create and Run container `docker-compose up --build` or `npm run build`
+2. Create and Run container `docker-compose up --build`
    - The server will start on [http://localhost:8888](http://localhost:8888)
 
 ## Run tests
