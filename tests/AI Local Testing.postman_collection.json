@@ -69,7 +69,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"model_id\": \"fail_test\"\r\n}",
+					"raw": "{\r\n    \"hf_model_id\": \"fail_test\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -97,7 +97,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"model_id\": \"Qwen/Qwen2.5-Coder-1.5B-Instruct\"\r\n    //\"model_id\": \"meta-llama/Llama-3.2-1B-Instruct\"\r\n}",
+					"raw": "{\r\n    \"hf_model_id\": \"Qwen/Qwen2.5-Coder-1.5B-Instruct\"\r\n    //\"hf_model_id\": \"meta-llama/Llama-3.2-1B-Instruct\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -172,7 +172,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"token\": \"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\"\r\n    //\"token\": \"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\"\r\n}",
+					"raw": "{\r\n    \"hf_token\": \"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\"\r\n    //\"hf_token\": \"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\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
