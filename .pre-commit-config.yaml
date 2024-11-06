@@ -10,7 +10,7 @@ repos:
     hooks:
       - id: pylint
         name: pylint
-        entry: cmd /c "set PYTHONPATH=%cd%& .venv\Scripts\pylint.exe"
+        entry: cmd /c "set PYTHONPATH=%cd%& .venv\Scripts\pylint.exe --disable=E0213"
         language: python
         types: [python]
         args: [--errors-only]
