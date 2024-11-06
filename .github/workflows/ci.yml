@@ -23,8 +23,8 @@ jobs:
     - name: Create .env file
       run: |
           echo "HF_TOKEN=${{ secrets.DEFAULT_HF_TOKEN }}" >> .env
-          echo "HF_MODEL_ID=${{ secrets.TEST_HF_MODEL_ID }}" >> .env
-          echo "MODEL_DIR=${{ secrets.MODEL_DIR }}" >> .env
+          echo "HF_MODEL_ID=${{ vars.TEST_HF_MODEL_ID }}" >> .env
+          echo "MODEL_DIR=${{ vars.MODEL_DIR }}" >> .env
 
     - name: Install dependencies
       run: |
@@ -86,7 +86,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ secrets.DOCKER_REPO }}
+          images: ${{ vars.DOCKER_REPO }}
           tags: |
             # set latest tag for default branch
             type=raw,value=latest,enable=true # {{is_default_branch}}
@@ -97,8 +97,8 @@ jobs:
       - name: Create .env file
         run: |
           echo "HF_TOKEN=${{ secrets.DEFAULT_HF_TOKEN }}" >> .env
-          echo "HF_MODEL_ID=${{ secrets.DEFAULT_HF_MODEL_ID }}" >> .env
-          echo "MODEL_DIR=${{ secrets.MODEL_DIR }}" >> .env
+          echo "HF_MODEL_ID=${{ vars.DEFAULT_HF_MODEL_ID }}" >> .env
+          echo "MODEL_DIR=${{ vars.MODEL_DIR }}" >> .env
 
       - name: Build and push Docker image
         id: push
