@@ -1,3 +1,4 @@
+from dotenv import load_dotenv
 import logging
 import os
 
@@ -6,6 +7,9 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 logger = logging.getLogger(__name__)
+
+# Load environment variables from .env file
+load_dotenv()
 
 
 def validate_huggingface_token(hf_token: str) -> bool:
@@ -91,8 +95,9 @@ class ModelManager:
         # Model details
         # meta-llama/Llama-3.2-1B-Instruct
         # Qwen/Qwen2.5-Coder-1.5B-Instruct
+        # Qwen/Qwen2.5-0.5B
 
-        self.model_name = "meta-llama/Llama-3.2-1B-Instruct"
-        self.token = "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"
+        self.model_name = os.getenv("HF_MODEL_ID")
+        self.token = os.getenv("HF_TOKEN")
         self.set_model_name(self.model_name)
         logger.info(f"Device: {self.device}")

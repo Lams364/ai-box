@@ -39,7 +39,8 @@ This project uses HuggingFace transformer and Flask for backend to run and deplo
 pip install -r requirements-dev.txt; pre-commit install
 ```
 
-5. Start backend: `python app.py`
+5. Rename `.env.exemple` to `.env` and add `HF_TOKEN` in the file
+6. Start backend: `python app.py`
    - The server will start on [http://localhost:8888](http://localhost:8888)
 
 ### Run pre-commit
