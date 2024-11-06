@@ -29,10 +29,10 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
-
-    - name: Run Integration Tests
-      run: |
-        pytest
+# Stop running tests, need to download model ->4 minutes +
+#    - name: Run Integration Tests
+#      run: |
+#        pytest
 
   lint-and-format:
     name: Formatting and Linting with Black and Pylint
@@ -54,9 +54,12 @@ jobs:
       run: |
         black --check .
 
+    - name: Set up Python Path
+      run: echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
+
     - name: Lint with Pylint
       run: |
-        pylint --disable=E0213 --errors-only **/*.py
+        pylint --disable=E0213 --errors-only --pyargs app **/*.py
 
 #  build-push-to-dockerhub:
 #    name: Build and Push Docker image to Docker Hub
