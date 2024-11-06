@@ -1,4 +1,4 @@
-name: CI/CD Github
+name: CI-CD AI-Box
 on:
   push:
     branches:
@@ -35,7 +35,7 @@ jobs:
 
     - name: Run Integration Tests
       run: |
-        pytest test
+        pytest tests
 
   lint-and-format:
     name: Formatting and Linting with Black and Pylint
