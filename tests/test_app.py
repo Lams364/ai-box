@@ -1,7 +1,11 @@
 import pytest
+from dotenv import load_dotenv
 from fastapi.testclient import TestClient
 
 from app import app
+
+# Load environment variables from .env file
+load_dotenv()
 
 client = TestClient(app)
 
