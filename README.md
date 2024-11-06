@@ -35,9 +35,9 @@ This project uses HuggingFace transformer and Flask for backend to run and deplo
    - On macOS/Linux: `source .venv/bin/activate`
 4. Install dependancies and activate pre-commit:
 
-```bash
-pip install -r requirements-dev.txt; pre-commit install
-```
+    ```bash
+    pip install -r requirements-dev.txt; pre-commit install
+    ```
 
 5. Rename `.env.exemple` to `.env` and add `HF_TOKEN` in the file
 6. Start backend: `python app.py`
@@ -49,7 +49,7 @@ There are several ways to run pre-commit:
 
 - Commit the code
 - Run command: `pre-commit run` (Executed on changed files)
-- Run command: `pre-commit run --all-files` (Force execute on all files) 
+- Run command: `pre-commit run --all-files` (Force execute on all files)
 
 ### Aditionnal steps to run on GPU locally
 
