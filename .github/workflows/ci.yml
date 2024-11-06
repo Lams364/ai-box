@@ -59,7 +59,7 @@ jobs:
 
     - name: Lint with Pylint
       run: |
-        pylint --disable=E0213 --errors-only --pyargs app **/*.py
+        pylint --disable=E0213 --errors-only **/*.py
 
 #  build-push-to-dockerhub:
 #    name: Build and Push Docker image to Docker Hub
