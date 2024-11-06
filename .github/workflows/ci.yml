@@ -1,4 +1,4 @@
-name: Construction et déploiement des images Docker
+name: CI/CD Github
 on:
   push:
     branches:
