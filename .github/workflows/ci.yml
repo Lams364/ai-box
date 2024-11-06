@@ -22,11 +22,8 @@ jobs:
 
     - name: Create .env file
       run: |
-          echo "HF_TOKEN='${{ secrets.HF_TOKEN }}'" >> .env
-          echo "HF_MODEL_ID='${{ secrets.HF_MODEL_ID }}'" >> .env
-#         echo "OWNER='${{ secrets.OWNER }}'" >> .env
-#          echo "REPO='${{ secrets.REPO }}'" >> .env
-#          echo "TOKEN_GITHUB='${{ secrets.TOKEN_GITHUB }}'" >> .env
+#          echo "HF_TOKEN='${{ secrets.HF_TOKEN }}'" >> .env
+#          echo "HF_MODEL_ID='${{ secrets.HF_MODEL_ID }}'" >> .env
 
     - name: Install dependencies
       run: |
@@ -35,7 +32,7 @@ jobs:
 
     - name: Run Integration Tests
       run: |
-        pytest tests
+        pytest
 
   lint-and-format:
     name: Formatting and Linting with Black and Pylint
