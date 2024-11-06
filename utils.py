@@ -97,7 +97,7 @@ class ModelManager:
         # Qwen/Qwen2.5-Coder-1.5B-Instruct
         # Qwen/Qwen2.5-0.5B
 
-        self.model_name = os.getenv("HF_MODEL_ID")
+        self.model_name = os.getenv("HF_MODEL_ID", "meta-llama/Llama-3.2-1B-Instruct")
         self.token = os.getenv("HF_TOKEN")
         self.set_model_name(self.model_name)
         logger.info(f"Device: {self.device}")

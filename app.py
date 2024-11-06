@@ -23,7 +23,7 @@ app = FastAPI(
     version="0.1.0",
 )
 
-MODEL_DIR = os.getenv("MODEL_DIR")
+MODEL_DIR = os.getenv("MODEL_DIR", "./models")
 os.makedirs(MODEL_DIR, exist_ok=True)
 
 model_manager = ModelManager(MODEL_DIR)
