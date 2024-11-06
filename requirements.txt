@@ -6,3 +6,4 @@ logging
 fastapi
 pydantic
 httpx
+python-dotenv

@@ -5,8 +5,12 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8888:8888"
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all  # Make sure all GPUs are visible to the container
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility  # Capabilities required for GPU usage
+      - MODEL_DIR=${MODEL_DIR}
     volumes:
-      - ./models:/app/models
+      - ${MODEL_DIR}:/app/models
     deploy:
       resources:
         reservations:
@@ -15,6 +19,3 @@ services:
               count: 1
               capabilities: [gpu]
     runtime: nvidia  # Use NVIDIA runtime explicitly
-    environment:
-      - NVIDIA_VISIBLE_DEVICES=all  # Make sure all GPUs are visible to the container
-      - NVIDIA_DRIVER_CAPABILITIES=compute,utility  # Capabilities required for GPU usage

@@ -1,0 +1,22 @@
+repos:
+  - repo: https://github.com/psf/black
+    rev: 24.10.0 # Assurez-vous d'utiliser la dernière version
+    hooks:
+      - id: black
+        entry: .venv/Scripts/black.exe
+        language_version: python3
+
+  - repo: local
+    hooks:
+      - id: pylint
+        name: pylint
+        entry: cmd /c "set PYTHONPATH=%cd%& .venv\Scripts\pylint.exe --disable=E0213"
+        language: python
+        types: [python]
+        args: [--errors-only]
+      - id: unittest
+        name: Run unittest
+        entry: .venv/Scripts/python.exe -m unittest discover
+        language: system
+        pass_filenames: false
+        always_run: true

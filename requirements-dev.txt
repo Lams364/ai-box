@@ -1,6 +1,8 @@
 -r requirements.txt
+pre-commit
+black
+pylint
 pytest
 pytest-pythonpath
 isort
-black
 flake8

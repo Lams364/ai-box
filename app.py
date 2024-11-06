@@ -1,3 +1,4 @@
+from dotenv import load_dotenv
 import logging
 import os
 
@@ -13,13 +14,16 @@ from utils import ModelManager
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Load environment variables from .env file
+load_dotenv()
+
 app = FastAPI(
     title="ai-box API Server",
     description="API interface that covers LLM generation with huggingface models",
     version="0.1.0",
 )
 
-MODEL_DIR = "./models"
+MODEL_DIR = os.getenv("MODEL_DIR", "./models")
 os.makedirs(MODEL_DIR, exist_ok=True)
 
 model_manager = ModelManager(MODEL_DIR)
@@ -103,7 +107,9 @@ async def predict(request: PredictRequest):
     )
     outputs = model.generate(**inputs, max_new_tokens=max_tokens)
     content = tokenizer.decode(outputs[0], skip_special_tokens=True)
-
+    # paramètres pour generate pour retourner réponse uniquement
+    # TAG pour modèles importants
+    # Expressions régulière pour r
     logger.info(f"Generated response for prompt: {prompt}")
     return {"content": content}
 
