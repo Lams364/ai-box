@@ -22,9 +22,9 @@ jobs:
 
     - name: Create .env file
       run: |
-          echo "HF_TOKEN='${{ secrets.DEFAULT_HF_TOKEN }}'" >> .env
-          echo "HF_MODEL_ID='${{ secrets.TEST_HF_MODEL_ID }}'" >> .env
-          echo "MODEL_DIR='${{ secrets.MODEL_DIR }}'" >> .env
+          echo "HF_TOKEN=${{ secrets.DEFAULT_HF_TOKEN }}" >> .env
+          echo "HF_MODEL_ID=${{ secrets.TEST_HF_MODEL_ID }}" >> .env
+          echo "MODEL_DIR=${{ secrets.MODEL_DIR }}" >> .env
 
     - name: Install dependencies
       run: |
@@ -96,9 +96,9 @@ jobs:
 
       - name: Create .env file
         run: |
-          echo "HF_TOKEN='${{ secrets.DEFAULT_HF_TOKEN }}'" >> .env
-          echo "HF_MODEL_ID='${{ secrets.DEFAULT_HF_MODEL_ID }}'" >> .env
-          echo "MODEL_DIR='${{ secrets.MODEL_DIR }}'" >> .env
+          echo "HF_TOKEN=${{ secrets.DEFAULT_HF_TOKEN }}" >> .env
+          echo "HF_MODEL_ID=${{ secrets.DEFAULT_HF_MODEL_ID }}" >> .env
+          echo "MODEL_DIR=${{ secrets.MODEL_DIR }}" >> .env
 
       - name: Build and push Docker image
         id: push
