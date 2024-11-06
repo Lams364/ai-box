@@ -106,7 +106,7 @@ async def predict(request: PredictRequest):
         inputs["attention_mask"] if "attention_mask" in inputs else None
     )
     outputs = model.generate(**inputs, max_new_tokens=max_tokens)
-    content = tokenizer.decode(outputs[1], skip_special_tokens=True)
+    content = tokenizer.decode(outputs[0], skip_special_tokens=True)
     # paramètres pour generate pour retourner réponse uniquement
     # TAG pour modèles importants
     # Expressions régulière pour r
