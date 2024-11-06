@@ -1,3 +1,4 @@
+from dotenv import load_dotenv
 import logging
 import os
 
@@ -13,13 +14,16 @@ from utils import ModelManager
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Load environment variables from .env file
+load_dotenv()
+
 app = FastAPI(
     title="ai-box API Server",
     description="API interface that covers LLM generation with huggingface models",
     version="0.1.0",
 )
 
-MODEL_DIR = "./models"
+MODEL_DIR = os.getenv("MODEL_DIR")
 os.makedirs(MODEL_DIR, exist_ok=True)
 
 model_manager = ModelManager(MODEL_DIR)
@@ -29,7 +33,7 @@ class PredictRequest(BaseModel):
     prompt: str
     max_new_tokens: int = 128
 
-    @field_validator("prompt", mode="before")
+    @field_validator("prompt")
     def validate_prompt(cls, prompt):
         if not prompt:
             raise ValueError("No prompt provided")
@@ -41,7 +45,7 @@ class PredictRequest(BaseModel):
 class ChangeModelRequest(BaseModel):
     hf_model_id: str
 
-    @field_validator("hf_model_id", mode="before")
+    @field_validator("hf_model_id")
     def validate_hf_model_id(cls, hf_model_id):
         if not hf_model_id:
             raise ValueError("No hf_model_id provided")
@@ -51,7 +55,7 @@ class ChangeModelRequest(BaseModel):
 class ChangeTokenRequest(BaseModel):
     hf_token: str
 
-    @field_validator("hf_token", mode="before")
+    @field_validator("hf_token")
     def validate_token(cls, hf_token):
         if not hf_token:
             raise ValueError("No hf_token provided")
@@ -102,8 +106,10 @@ async def predict(request: PredictRequest):
         inputs["attention_mask"] if "attention_mask" in inputs else None
     )
     outputs = model.generate(**inputs, max_new_tokens=max_tokens)
-    content = tokenizer.decode(outputs[0], skip_special_tokens=True)
-
+    content = tokenizer.decode(outputs[1], skip_special_tokens=True)
+    # paramètres pour generate pour retourner réponse uniquement
+    # TAG pour modèles importants
+    # Expressions régulière pour r
     logger.info(f"Generated response for prompt: {prompt}")
     return {"content": content}
 
