@@ -11,6 +11,7 @@ This project uses HuggingFace transformer and Flask for backend to run and deplo
     - [Run pre-commit](#run-pre-commit)
     - [Aditionnal steps to run on GPU locally](#aditionnal-steps-to-run-on-gpu-locally)
   - [Run on Docker](#run-on-docker)
+    - [Docker Nvidia setup](#docker-nvidia-setup)
   - [Run tests](#run-tests)
   - [API Documentation](#api-documentation)
     - [API endpoint:`/predict`](#api-endpointpredict)
@@ -65,6 +66,38 @@ There are several ways to run pre-commit:
 1. Open Docker Desktop
 2. Create and Run container `docker-compose up --build`
    - The server will start on [http://localhost:8888](http://localhost:8888)
+
+### Docker Nvidia setup
+
+1. Install Nvidia Cuda
+
+    ```bash
+    wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb
+    sudo dpkg -i cuda-keyring_1.1-1_all.deb
+    sudo apt-get update
+    sudo apt-get -y install cuda-toolkit-12-6
+    ```
+
+2. Install Nvidia Drivers
+
+    ```bash
+    sudo apt-get install -y nvidia-open
+    sudo apt-get install -y cuda-drivers
+    ```
+
+3. Config nvidia-docker runtime
+
+    ```bash
+    sudo apt-get install -y nvidia-docker2
+    sudo nvidia-ctk runtime configure --runtime=docker
+    sudo systemctl restart docker
+    ```
+
+4. Look at apps running on GPU in this commmand :
+
+    ```bahs
+    nvidia-smi
+    ```
 
 ## Run tests
 
