@@ -7,7 +7,8 @@ This project uses HuggingFace transformer and Flask for backend to run and deplo
 - [AI-Box](#ai-box)
   - [Table des matières](#table-des-matières)
   - [Prerequisites](#prerequisites)
-  - [Run locally](#run-locally)
+  - [Run locally and enable pre-commit](#run-locally-and-enable-pre-commit)
+    - [Run pre-commit](#run-pre-commit)
     - [Aditionnal steps to run on GPU locally](#aditionnal-steps-to-run-on-gpu-locally)
   - [Run on Docker](#run-on-docker)
   - [Run tests](#run-tests)
@@ -23,7 +24,7 @@ This project uses HuggingFace transformer and Flask for backend to run and deplo
 - Docker (Docker Desktop)
 - Python (tested with 3.11/3.12)
 
-## Run locally
+## Run locally and enable pre-commit
 
 1. Open terminal in project root
 2. Create python virtual environment
@@ -32,9 +33,22 @@ This project uses HuggingFace transformer and Flask for backend to run and deplo
 3. Activate Virtual Environement
    - On Windows: `.venv\Scripts\activate`
    - On macOS/Linux: `source .venv/bin/activate`
-4. Install dependancies: `pip install -r requirements.txt`
+4. Install dependancies and activate pre-commit:
+
+```bash
+pip install -r requirements-dev.txt; pre-commit install
+```
+
 5. Start backend: `python app.py`
    - The server will start on [http://localhost:8888](http://localhost:8888)
+
+### Run pre-commit
+
+There are several ways to run pre-commit:
+
+- Commit the code
+- Run command: `pre-commit run` (Executed on changed files)
+- Run command: `pre-commit run --all-files` (Force execute on all files) 
 
 ### Aditionnal steps to run on GPU locally
 
