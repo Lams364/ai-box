@@ -9,6 +9,8 @@ services:
       - NVIDIA_VISIBLE_DEVICES=all  # Make sure all GPUs are visible to the container
       - NVIDIA_DRIVER_CAPABILITIES=compute,utility  # Capabilities required for GPU usage
       - MODEL_DIR=${MODEL_DIR}
+      - HF_TOKEN=${HF_TOKEN}
+      - HF_MODEL_ID=${HF_MODEL_ID}
     volumes:
       - ${MODEL_DIR}:/app/models
     deploy:

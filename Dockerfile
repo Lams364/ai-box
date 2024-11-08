@@ -28,4 +28,4 @@ COPY . .
 EXPOSE 8888
 
 # Run the Flask app using the virtual environment's Python
-CMD ["/opt/venv/bin/python", "run_model.py"]
+CMD ["/opt/venv/bin/python", "app.py"]
