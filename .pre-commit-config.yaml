@@ -20,6 +20,10 @@ repos:
         language: python
         types: [python]
         args: [--errors-only]
+      - id: add-modified-files
+        name: Add modified files by the hooks
+        entry: ./add_modified_files.sh
+        language: system
       - id: pytest
         name: Run pytest
         entry: python -m pytest  # Make sure pytest is available in the environment (venv)
