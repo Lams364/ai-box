@@ -15,9 +15,9 @@ repos:
         language: python
         types: [python]
         args: [--errors-only]
-      - id: unittest
-        name: Run unittest
-        entry: python -m unittest discover  # Make sure unittest is available in the environment (venv)
+      - id: pytest
+        name: Run pytest
+        entry: python -m pytest  # Make sure pytest is available in the environment (venv)
         language: system
         pass_filenames: false
         always_run: true
