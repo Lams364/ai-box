@@ -9,6 +9,11 @@ repos:
 
   - repo: local
     hooks:
+      - id: isort
+        name: isort
+        entry: isort  # Make sure isort is available in the environment (venv)
+        language: python
+        types: [python]
       - id: pylint
         name: pylint
         entry: pylint  # Make sure pylint is available in the environment (venv)

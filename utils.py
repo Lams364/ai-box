@@ -1,9 +1,9 @@
-from dotenv import load_dotenv
 import logging
 import os
 
 import requests
 import torch
+from dotenv import load_dotenv
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 logger = logging.getLogger(__name__)
