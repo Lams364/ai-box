@@ -25,7 +25,7 @@ app = FastAPI(
 
 MODEL_DIR = os.getenv("MODEL_DIR")
 if MODEL_DIR in [None, ""]:
-    MODEL_DIR = "./models"
+    MODEL_DIR = "./hf_local_models"
 os.makedirs(MODEL_DIR, exist_ok=True)
 
 model_manager = ModelManager(MODEL_DIR)

@@ -1,10 +1,10 @@
 **.env
 **.venv
-**venv
-**/models/*
-!/models/.gitkeep
+**/hf_local_models/*
+!/hf_local_models/.gitkeep
 **__pycache__
 **.pytest_cache
 **.DS_Store
 **/node_modules
 **/node_modules/
+.python_version

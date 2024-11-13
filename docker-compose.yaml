@@ -12,7 +12,7 @@ services:
       - HF_TOKEN=${HF_TOKEN}
       - HF_MODEL_ID=${HF_MODEL_ID}
     volumes:
-      - ${MODEL_DIR}:/app/models
+      - ${MODEL_DIR}:/app/hf_local_models
     deploy:
       resources:
         reservations:

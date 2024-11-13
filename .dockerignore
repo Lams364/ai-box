@@ -1,6 +1,6 @@
 node_modules
 log-advice-generator
-models
+hf_local_models
 tests
 .venv
 venv

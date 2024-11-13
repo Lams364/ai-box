@@ -12,13 +12,5 @@
             "console": "integratedTerminal",
             "python": "${command:python.interpreterPath}"
         },
-        {
-            "name": "Run Extension",
-            "type": "extensionHost",
-            "request": "launch",
-            "args": [
-                "--extensionDevelopmentPath=${workspaceFolder}/log-advice-generator",
-            ],
-        }
     ]
 }
