@@ -6,9 +6,9 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel, field_validator
 
-from utils import ModelManager
+from models import ChangeModelRequest, ChangeTokenRequest, PredictRequest
+from utils import ModelManager, build_prompt, generate_model_response
 
 # Initialize logging
 logging.basicConfig(level=logging.INFO)
@@ -31,37 +31,8 @@ os.makedirs(MODEL_DIR, exist_ok=True)
 model_manager = ModelManager(MODEL_DIR)
 
 
-class PredictRequest(BaseModel):
-    prompt: str
-    max_new_tokens: int = 128
-
-    @field_validator("prompt")
-    def validate_prompt(cls, prompt):  # pylint: disable=no-self-argument
-        if not prompt:
-            raise ValueError("No prompt provided")
-        if len(prompt) > 2048:
-            raise ValueError("Prompt is too long")
-        return prompt
-
-
-class ChangeModelRequest(BaseModel):
-    hf_model_id: str
-
-    @field_validator("hf_model_id")
-    def validate_hf_model_id(cls, hf_model_id):  # pylint: disable=no-self-argument
-        if not hf_model_id:
-            raise ValueError("No hf_model_id provided")
-        return hf_model_id
-
-
-class ChangeTokenRequest(BaseModel):
-    hf_token: str
-
-    @field_validator("hf_token")
-    def validate_token(cls, hf_token):  # pylint: disable=no-self-argument
-        if not hf_token:
-            raise ValueError("No hf_token provided")
-        return hf_token
+def get_model_manager():
+    return model_manager
 
 
 @app.exception_handler(RequestValidationError)
@@ -76,9 +47,6 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         status_code=400,
         content={"errors": simplified_errors},
     )
-
-
-model_manager.init_model()
 
 
 @app.post(
@@ -101,15 +69,42 @@ async def predict(request: PredictRequest):
     prompt = request.prompt
     max_tokens = request.max_new_tokens
 
-    inputs = tokenizer(prompt, return_tensors="pt", padding=True, truncation=True).to(
-        model_manager.device
-    )
-    inputs["attention_mask"] = (
-        inputs["attention_mask"] if "attention_mask" in inputs else None
-    )
-    outputs = model.generate(**inputs, max_new_tokens=max_tokens)
-    content = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    content = generate_model_response(model, tokenizer, prompt, max_tokens)
 
+    logger.info(f"Generated response for prompt: {prompt}")
+    return {"content": content}
+
+
+@app.post(
+    "/generate/log-advice",
+    summary="Generate response from model to help with logging",
+    response_description="Model response",
+)
+async def predict(request: PredictRequest):
+    """
+    Generate a response from the model based on the provided code.
+
+    - **prompt**: The code snippet for the model to generate a response.
+    - **max_new_tokens**: The maximum number of new tokens to generate (default is 128).
+
+    Returns:
+    - **content**: The generated response from the model.
+    """
+    model = model_manager.model
+    tokenizer = model_manager.tokenizer
+    prompt = request.prompt
+    max_tokens = request.max_new_tokens
+
+    context = f"""
+    You are an AI assistant helping a developer.\n
+    Your task is to add simples logging steps to the code.\n
+    Do not change the code, or add methods.\n
+    Here is the code :\n
+    """
+
+    contexted_prompt = build_prompt(context, prompt)
+
+    content = generate_model_response(model, tokenizer, contexted_prompt, max_tokens)
     logger.info(f"Generated response for prompt: {prompt}")
     return {"content": content}
 
@@ -134,7 +129,7 @@ async def change_model(request: ChangeModelRequest):
         raise HTTPException(status_code=400, detail="No hf_model_id provided")
 
     hf_model_id = request.hf_model_id
-    completed = model_manager.set_model_name(hf_model_id)
+    completed = model_manager.set_model(hf_model_id)
     return {"completed": completed, "model_name": model_manager.model_name}
 
 
@@ -172,8 +167,13 @@ async def model_info():
     Returns:
     - **model_name**: The name of the model currently in use.
     - **device**: Information about the device executing the model (cpu or cuda).
+    - **model_dir**: The directory where the model is stored.
     """
-    return {"model_name": model_manager.model_name, "device": str(model_manager.device)}
+    return {
+        "model_name": model_manager.model_name or "No model set",
+        "device": model_manager.device or "Unknown",
+        "model_dir": model_manager.model_dir,
+    }
 
 
 if __name__ == "__main__":

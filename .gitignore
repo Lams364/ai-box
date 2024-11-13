@@ -7,4 +7,4 @@
 **.DS_Store
 **/node_modules
 **/node_modules/
-.python_version
+.python-version

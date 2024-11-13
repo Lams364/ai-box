@@ -33,7 +33,7 @@ jobs:
 
     - name: Run Integration Tests
       run: |
-        pytest
+        pytest -v
 
   lint-and-format:
     name: Formatting and Linting with Black and Pylint

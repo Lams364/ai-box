@@ -1,0 +1,1 @@
+def validate_huggingface_token(hf_token: str) -> bool:\r\n    headers = {\"Authorization\": f\"Bearer {hf_token}\"}\r\n    response = requests.get(\"https:\/\/huggingface.co\/api\/whoami-v2\", headers=headers)\r\n    return response.status_code == 200

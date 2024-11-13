@@ -7,3 +7,5 @@ fastapi
 pydantic
 httpx
 python-dotenv
+bitsandbytes
+accelerate>=0.26.0

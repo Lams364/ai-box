@@ -2,10 +2,12 @@ import pytest
 from dotenv import load_dotenv
 from fastapi.testclient import TestClient
 
+import app as app_file
 from app import app
 
 # Load environment variables from .env file
 load_dotenv()
+
 
 client = TestClient(app)
 
@@ -13,6 +15,18 @@ client = TestClient(app)
 def test_predict():
     response = client.post(
         "/predict", json={"prompt": "Hello, world!", "max_new_tokens": 5}
+    )
+    assert response.status_code == 200
+    assert "content" in response.json()
+
+
+def test_generate_log_advice():
+
+    with open("tests/escaped_code.text", "r") as file:
+        escaped_code = file.read()
+
+    response = client.post(
+        "/generate/log-advice", json={"prompt": escaped_code, "max_new_tokens": 10}
     )
     assert response.status_code == 200
     assert "content" in response.json()
@@ -58,3 +72,4 @@ def test_model_info():
     assert response.status_code == 200
     assert "model_name" in response.json()
     assert "device" in response.json()
+    assert "model_dir" in response.json()
