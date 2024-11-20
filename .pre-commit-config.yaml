@@ -12,7 +12,7 @@ repos:
       - id: isort
         name: isort
         entry: isort  # Make sure isort is available in the environment (venv)
-        language: python
+        language: system
         types: [python]
       - id: pylint
         name: pylint
@@ -22,11 +22,14 @@ repos:
         args: [--errors-only]
       - id: add-modified-files
         name: Add modified files by the hooks
-        entry: ./add_modified_files.sh
+        entry: python ./add_modified_files.py
         language: system
+        types: [python]
       - id: pytest
-        name: Run pytest
-        entry: python -m pytest  # Make sure pytest is available in the environment (venv)
+        name: pytest
+        stages: [pre-commit]
+        entry: pytest  # Make sure pytest is available in the environment (venv)
         language: system
+        types: [python]
         pass_filenames: false
         always_run: true
