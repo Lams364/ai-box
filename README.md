@@ -99,6 +99,8 @@ There are several ways to run pre-commit:
     nvidia-smi
     ```
 
+5. In Docker Desktop for windows, enable Ubuntu WSL integration `Options > Resources > WSL Integration`.
+
 ## Run tests
 
 1. Open terminal in project root

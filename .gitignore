@@ -1,5 +1,6 @@
 **.env
 **.venv
+**venv
 **/models/*
 !/models/.gitkeep
 **__pycache__

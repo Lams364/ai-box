@@ -1,22 +1,34 @@
+# Make sure to activate the venv environment before using the pre-commit hooks
 repos:
   - repo: https://github.com/psf/black
-    rev: 24.10.0 # Assurez-vous d'utiliser la dernière version
+    rev: 24.10.0
     hooks:
       - id: black
-        entry: .venv/Scripts/black.exe
+        entry: black  # Make sure black is available in the environment (venv)
         language_version: python3
 
   - repo: local
     hooks:
+      - id: isort
+        name: isort
+        entry: isort  # Make sure isort is available in the environment (venv)
+        language: system
+        types: [python]
       - id: pylint
         name: pylint
-        entry: cmd /c "set PYTHONPATH=%cd%& .venv\Scripts\pylint.exe --disable=E0213"
+        entry: pylint  # Make sure pylint is available in the environment (venv)
         language: python
         types: [python]
         args: [--errors-only]
-      - id: unittest
-        name: Run unittest
-        entry: .venv/Scripts/python.exe -m unittest discover
+      - id: add-modified-files
+        name: Add modified files by the hooks
+        entry: python ./add_modified_files.py
         language: system
+        types: [python]
+      - id: pytest
+        name: pytest
+        entry: python -m pytest  # Make sure pytest is available in the environment (venv)
+        language: system
+        types: [python]
         pass_filenames: false
         always_run: true
