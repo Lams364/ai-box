@@ -27,8 +27,7 @@ repos:
         types: [python]
       - id: pytest
         name: pytest
-        stages: [pre-commit]
-        entry: pytest  # Make sure pytest is available in the environment (venv)
+        entry: python -m pytest  # Make sure pytest is available in the environment (venv)
         language: system
         types: [python]
         pass_filenames: false
